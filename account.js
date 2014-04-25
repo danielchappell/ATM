@@ -7,12 +7,21 @@ var Account = (function() {
         userPin = initPin;
         userBalance = initDeposit;
 
+        this.validatePin = function(pin) {
+          if (pin === userPin) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        };
+
         this.retrieveBalance = function(pin) {
           if (pin === userPin) {
             return userBalance;
           }
           else {
-            return "INVALID PIN"
+            return "INVALID PIN";
           }
         };
       }

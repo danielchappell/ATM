@@ -7,12 +7,28 @@ var Account = (function() {
         userPin = initPin;
         userBalance = initDeposit;
 
+        //PRIVATE METHODS//
+        setPin = function(newPin) {
+          userPin = newPin;
+        };
+
+        //PUBLIC METHODS//
+
         this.validatePin = function(pin) {
           if (pin === userPin) {
             return true;
           }
           else {
             return false;
+          }
+        };
+
+        this.setNewPin = function(pin, newPin) {
+          if ( this.validatePin(pin) ) {
+            setPin(newPin);
+          }
+          else {
+            return "INVALID PIN";
           }
         };
 

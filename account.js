@@ -33,7 +33,7 @@ var Account = (function() {
         };
 
         this.retrieveBalance = function(pin) {
-          if (pin === userPin) {
+          if ( this.validate(pin) ) {
             return userBalance;
           }
           else {

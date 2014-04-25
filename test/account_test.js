@@ -1,7 +1,6 @@
 var chai = require('chai'),
 Account = require('../account.js'),
 expect = chai.expect;
-chai.should()
 
 
 //TESTS FOR ACCOUNT.JS//
@@ -11,6 +10,9 @@ describe("Account", function() {
   describe("constructor", function() {
     it("should initialize", function() {
       expect(user.constructor.name).to.equal("Account");
+    });
+    it("should accept initial deposit and pin", function() {
+      expect(Account).to.have.length(2);
     });
   });
 });

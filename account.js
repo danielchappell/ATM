@@ -11,6 +11,9 @@ var Account = (function() {
           if (pin === userPin) {
             return userBalance;
           }
+          else {
+            return "INVALID PIN"
+          }
         };
       }
       return Account;

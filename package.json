@@ -1,0 +1,16 @@
+{
+  "name": "ATM",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Automatic Teller Machine",
+  "main": "atm.js",
+  "scripts": {
+    "test": "node atm.js"
+  },
+  "author": "Joseph Chappell",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^1.18.2",
+    "chai": "^1.9.1"
+  }
+}

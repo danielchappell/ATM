@@ -20,5 +20,9 @@ describe("Account", function() {
       var balance = user.retrieveBalance('4385');
       expect(balance).to.equal(2000);
     });
+    it("should log error if pin is invalid", function() {
+      var balance = user.retrieveBalance('5000');
+      expect(balance).to.equal('INVALID PIN');
+    });
   });
 });

@@ -14,5 +14,9 @@ describe("ATM", function() {
     it("should initialize", function() {
       expect(atm.constructor.name).to.equal("ATM");
     });
+    it('should have accounts property', function() {
+      var isArray = Array.isArray(atm.accounts);
+      expect(isArray).to.equal(true);
+    });
   });
 });

@@ -15,6 +15,14 @@ describe("Account", function() {
       expect(Account).to.have.length(2);
     });
   });
+  describe("validatePin", function() {
+    it("should accurately validate provided pin", function() {
+      var valid = user.validatePin("5000");
+      expect(valid).to.equal(false);
+      valid = user.validatePin("4385");
+      expect(valid).to.equal(true);
+    });
+  });
   describe("retrieveBalance", function() {
     it("should be able to retrieve current Balance", function() {
       var balance = user.retrieveBalance('4385');

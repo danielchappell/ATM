@@ -3,9 +3,15 @@
 var Account = (function() {
       function Account(initDeposit, initPin) {
         //PRIVATE PIN AND BALANCE//
-        var userPin, userBalance;
+        var userPin, userBalance, setPin;
         userPin = initPin;
         userBalance = initDeposit;
+
+        this.retrieveBalance = function(pin) {
+          if (pin === userPin) {
+            return userBalance;
+          }
+        };
       }
       return Account;
     })();

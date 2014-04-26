@@ -3,13 +3,17 @@
 var Account = (function() {
       function Account(initDeposit, initPin) {
         //PRIVATE PIN AND BALANCE//
-        var userPin, userBalance, setPin;
+        var userPin, userBalance, setPin, changeBalance;
         userPin = initPin;
         userBalance = initDeposit;
 
         //PRIVATE METHODS//
         setPin = function(newPin) {
           userPin = newPin;
+        };
+
+        changeBalance = function(newBalance) {
+          userBalance = newBalance;
         };
 
         //PUBLIC METHODS//
@@ -33,11 +37,21 @@ var Account = (function() {
         };
 
         this.retrieveBalance = function(pin) {
-          if ( this.validate(pin) ) {
+          if ( this.validatePin(pin) ) {
             return userBalance;
           }
           else {
             return "INVALID PIN";
+          }
+        };
+
+        this.editBalance = function(pin, newBalance) {
+          if ( this.validatePin(pin) ) {
+            changeBalance(newBalance);
+            return userBalance;
+          }
+          else{
+            return "INVALID PIN"
           }
         };
       }

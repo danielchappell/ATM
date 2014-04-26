@@ -7,10 +7,8 @@ chai.should()
 //TESTS FOR ATM.JS//
 
 describe("ATM", function() {
-  //CREATE NEW INSTANCE FOR EACH TEST//
-  var atm = new ATM(),
-  user = null;
   describe('constructor', function() {
+    var atm = new ATM();
     it("should initialize", function() {
       expect(atm.constructor.name).to.equal("ATM");
     });
@@ -21,9 +19,13 @@ describe("ATM", function() {
     });
   });
   describe("newAccount", function() {
+    var atm = new ATM();
     it("should be able to create new account", function() {
-      user = atm.newAccount(1000, 5577);
+      var userNum, user;
+      userNum = atm.newAccount(5000, '4242');
+      user = atm.accounts[userNum - 1];
       expect(user.constructor.name).to.equal("Account");
+      expect(atm.accounts.length).to.equal(1);
     });
   });
 });

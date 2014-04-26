@@ -18,6 +18,29 @@ describe("ATM", function() {
       expect(isArray).to.equal(true);
     });
   });
+  describe("on", function(){
+    var atm = new ATM();
+    it("should listen for user to start session", function() {
+      expect(atm.atmStatus).to.equal("ON");
+      atm.on();
+      expect(atm.atmStatus).to.equal("LISTENING");
+    });
+  });
+  describe("startSession", function() {
+    var inSession,
+    atm = new ATM(),
+    userNum = atm.newAccount(5000, '4242'),
+    credentials = {"account number": 1, "pin": "4242"};
+    it("should be able to start new bank session", function () {
+      inSession = atm.startSession(null, credentials);
+      expect(inSession).to.equal("session started");
+    });
+    it("should validate user", function() {
+      var credentials = {"account number": 1, "pin": "5000"};
+      inSession = atm.startSession(null, credentials);
+      expect(inSession).to.equal("invalid credentials")
+    });
+  });
   describe("newAccount", function() {
     var atm = new ATM();
     it("should be able to create new account", function() {

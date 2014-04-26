@@ -2,10 +2,11 @@
 //BANK ACCOUNT CONSTRUCTOR USED IN ATM.JS//
 var Account = (function() {
       function Account(initDeposit, initPin) {
-        //PRIVATE PIN AND BALANCE//
-        var userPin, userBalance, setPin, changeBalance;
+        //PRIVATE DATA//
+        var userPin, userBalance, accountLedger, setPin, changeBalance;
         userPin = initPin;
         userBalance = initDeposit;
+        accountLedger = [];
 
         //PRIVATE METHODS//
         setPin = function(newPin) {
@@ -39,6 +40,15 @@ var Account = (function() {
         this.retrieveBalance = function(pin) {
           if ( this.validatePin(pin) ) {
             return userBalance;
+          }
+          else {
+            return "INVALID PIN";
+          }
+        };
+
+        this.retrieveLedger = function(pin) {
+          if ( this.validatePin(pin) ) {
+            return accountLedger;
           }
           else {
             return "INVALID PIN";

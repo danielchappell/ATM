@@ -48,16 +48,36 @@ describe("Account", function() {
       expect(balance).to.equal('INVALID PIN');
     });
   });
-  describe("editBalance", function() {
+  describe("retrieveLedger", function() {
     var user = new Account(2000, '4385');
+    it("should be able to retrieve account ledger", function() {
+      var isArray,
+      ledger = user.retrieveLedger('4385');
+      isArray = Array.isArray(ledger);
+      expect(isArray).to.equal(true);
+    });
+  });
+  describe("editBalance", function() {
     it("should be able to change user's balance", function() {
       //CONFIRM EXPECTED BALANCE//
-      var balance = user.retrieveBalance('4385');
+      var user = new Account(2000, '4385'),
+      balance = user.retrieveBalance('4385');
       expect(balance).to.equal(2000);
       //CHANGE BALANCE AND RERUN ASSERTION//
       user.editBalance('4385', 5000);
       balance = user.retrieveBalance('4385');
       expect(balance).to.equal(5000);
+    });
+    it("should update the account ledger", function() {
+      var ledgerLength,
+      user = new Account(2000, '4385');
+      //CONFIRM LEDGER LENGTH IS 0//
+      ledgerLength = user.retrieveLedger('4385').length;
+      expect(ledgerLength).to.equal(0);
+      //EDIT BALANCE AND RECHECK LEDGER LENGTH//
+      user.editBalance('4385', 500);
+      ledgerLength = user.retrieveLedger('4385').length;
+      expect(ledgerLength).to.equal(1);
     });
   });
 });

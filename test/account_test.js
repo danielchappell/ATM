@@ -48,4 +48,16 @@ describe("Account", function() {
       expect(balance).to.equal('INVALID PIN');
     });
   });
+  describe("editBalance", function() {
+    var user = new Account(2000, '4385');
+    it("should be able to change user's balance", function() {
+      //CONFIRM EXPECTED BALANCE//
+      var balance = user.retrieveBalance('4385');
+      expect(balance).to.equal(2000);
+      //CHANGE BALANCE AND RERUN ASSERTION//
+      user.editBalance('4385', 5000);
+      balance = user.retrieveBalance('4385');
+      expect(balance).to.equal(5000);
+    });
+  });
 });

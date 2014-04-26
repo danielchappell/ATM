@@ -3,7 +3,7 @@
 var Account = (function() {
       function Account(initDeposit, initPin) {
         //PRIVATE DATA//
-        var userPin, userBalance, accountLedger, setPin, changeBalance;
+        var userPin, userBalance, accountLedger, setPin, changeBalance, updateLedger;
         userPin = initPin;
         userBalance = initDeposit;
         accountLedger = [];
@@ -13,9 +13,28 @@ var Account = (function() {
           userPin = newPin;
         };
 
+        updateLedger = function(newBalance){
+          var newEntry, transactionType, difference;
+          if (userBalance > newBalance) {
+            transactionType = "Debit";
+            difference = "-" + (userBalance - newBalance);
+          }
+          else if (userBalance < newBalance) {
+            transactionType = "Credit";
+            difference = "+" + (newBalance - userBalance);
+          }
+          else{
+            return
+          }
+          newEntry = [new Date(), transactionType, difference, newBalance];
+          accountLedger.push(newEntry);
+        }
+
         changeBalance = function(newBalance) {
+          updateLedger(newBalance);
           userBalance = newBalance;
         };
+
 
         //PUBLIC METHODS//
 

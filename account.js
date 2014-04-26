@@ -1,11 +1,12 @@
 //ACCOUNT.JS//
 //BANK ACCOUNT CONSTRUCTOR USED IN ATM.JS//
 var Account = (function() {
-      function Account(initDeposit, initPin) {
+      function Account(initDeposit, initPin, bank) {
         //PRIVATE DATA//
-        var userPin, userBalance, accountLedger, setPin, changeBalance, updateLedger;
+        var userPin, userBalance, accountLedger, setPin, changeBalance, updateLedger, bankID;
         userPin = initPin;
         userBalance = initDeposit;
+        bankID = bank;
         accountLedger = [];
 
         //PRIVATE METHODS//
@@ -38,8 +39,8 @@ var Account = (function() {
 
         //PUBLIC METHODS//
 
-        this.validatePin = function(pin) {
-          if (pin === userPin) {
+        this.validate = function(pin, bank) {
+          if (pin === userPin && bank === bankID) {
             return true;
           }
           else {
@@ -47,8 +48,8 @@ var Account = (function() {
           }
         };
 
-        this.setNewPin = function(pin, newPin) {
-          if ( this.validatePin(pin) ) {
+        this.setNewPin = function(pin, bank, newPin) {
+          if ( this.validate(pin, bank) ) {
             setPin(newPin);
           }
           else {
@@ -56,8 +57,8 @@ var Account = (function() {
           }
         };
 
-        this.retrieveBalance = function(pin) {
-          if ( this.validatePin(pin) ) {
+        this.retrieveBalance = function(pin, bank) {
+          if ( this.validate(pin, bank) ) {
             return userBalance;
           }
           else {
@@ -65,8 +66,8 @@ var Account = (function() {
           }
         };
 
-        this.retrieveLedger = function(pin) {
-          if ( this.validatePin(pin) ) {
+        this.retrieveLedger = function(pin, bank) {
+          if ( this.validate(pin, bank) ) {
             return accountLedger;
           }
           else {
@@ -74,8 +75,8 @@ var Account = (function() {
           }
         };
 
-        this.editBalance = function(pin, newBalance) {
-          if ( this.validatePin(pin) ) {
+        this.editBalance = function(pin, bank, newBalance) {
+          if ( this.validate(pin, bank) ) {
             changeBalance(newBalance);
             return userBalance;
           }

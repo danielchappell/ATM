@@ -46,7 +46,7 @@ describe("ATM", function() {
     it("should be able to create new account", function() {
       var userNum, user;
       userNum = atm.newAccount(5000, '4242');
-      user = atm.accounts[userNum - 1];
+      user = atm.accounts[userNum - 195342];
       expect(user.constructor.name).to.equal("Account");
       expect(atm.accounts.length).to.equal(1);
     });

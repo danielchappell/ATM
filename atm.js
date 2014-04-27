@@ -73,7 +73,8 @@ ATM = (function() {
     this.newAccount = function(initDeposit, initPin) {
       var newAccount = new Account(initDeposit, initPin, bankID);
       this.accounts.push(newAccount);
-      newAccount.accountNumber = this.accounts.length;
+      //USER ACCOUNTS START AT ARBITARY 6 DIGIT NUMBER//
+      newAccount.accountNumber = this.accounts.length + 195341;
       return newAccount.accountNumber;
     };
     //STARTS AUTOMATION-WAITS FOR USER TO START SESSION//
@@ -88,13 +89,13 @@ ATM = (function() {
     this.startSession = function(err, credentials) {
       var accountNumber = credentials["account number"];
       //MAKE SURE ACCOUNT IS ON FILE//
-      if ( this.accounts[accountNumber - 1] instanceof Account) {
+      if ( this.accounts[accountNumber - 195342] instanceof Account) {
         var verified,
         pin = credentials["pin"];
         //RUN VALIDATION TO START SECURE SESSION//
-        verified = this.accounts[accountNumber - 1].validate(pin, bankID);
+        verified = this.accounts[accountNumber - 195342].validate(pin, bankID);
         if (verified) {
-          session = this.accounts[accountNumber - 1];
+          session = this.accounts[accountNumber - 195342];
           sessionPin = pin;
           this.atmStatus = "IN SESSION";
           return "session started";

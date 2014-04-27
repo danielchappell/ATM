@@ -77,4 +77,16 @@ describe("ATM", function() {
       expect(error).to.equal("insufficient funds");
     });
   });
+  describe("depositFunds", function(){
+    var atm = new ATM();
+    userNum = atm.newAccount(5000, '4242'),
+    credentials = {"account number": userNum, "pin": "4242"};
+    atm.startSession(null, credentials);
+    it("should be able to deposit funds", function(){
+      balance = atm.checkBalance();
+      expect(balance).to.equal(5000);
+      balance = atm.depositFunds(1000);
+      expect(balance).to.equal(6000);
+    });
+  });
 });

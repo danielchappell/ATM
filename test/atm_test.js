@@ -1,7 +1,7 @@
 var chai = require('chai'),
+sinon = require('sinon'),
 ATM = require('../atm.js'),
 expect = chai.expect;
-chai.should()
 
 
 //TESTS FOR ATM.JS//
@@ -87,6 +87,30 @@ describe("ATM", function() {
       expect(balance).to.equal(5000);
       balance = atm.depositFunds(1000);
       expect(balance).to.equal(6000);
+    });
+  });
+  describe("printLedger", function() {
+    //STUB TIME//
+    var fakeDate = new Date("Saturday, April 26, 2014 23:52:40").getTime(),
+    clock = sinon.useFakeTimers(fakeDate),
+    atm = new ATM(),
+    userNum = atm.newAccount(5000, '4242'),
+    credentials = {"account number": userNum, "pin": "4242"};
+    atm.startSession(null, credentials);
+    it("should correctly formated account ledger", function(){
+      var ledger, expectation;
+      atm.depositFunds(500);
+      atm.withdrawFunds(2000);
+      ledger = atm.printLedger();
+      expectation = [
+        "Saturday, April 26, 2014 23:52:40    Credit    +500  $5500.00",
+        "Saturday, April 26, 2014 23:52:40    Debit    -2000  $3500.00"
+      ];
+      //EXPECT EACH ENTRY TO MATCH//
+      for ( var _i = 0, _length = ledger.length; _i < _length; _i++ ) {
+        expect(ledger[_i]).to.equal(expectation[_i]);
+      }
+      clock.restore();
     });
   });
   describe("endSession", function() {

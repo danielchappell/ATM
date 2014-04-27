@@ -10,7 +10,8 @@ ATM = (function() {
   function ATM() {
     //PRIVATE KEYS AND DATA//
     var bankID, session, sessionPin, defaultScreenCallback,userRegistrationCallback, transactionMenu,
-      transactionMenuCallback, promptAnotherTransaction, anotherTransactionCallback, clearScreen;
+      transactionMenuCallback, promptAnotherTransaction, anotherTransactionCallback, newPinCallback,
+       withdrawFundsCallback, depositFundsCallback, clearScreen;
     //ENSURES ONLY BANK THAT CREATED ACCOUNT CAN SUCCESSFULLY CALL ACCOUNT METHODS//
     bankID = Math.floor(Math.random() * 1000000000000000).toString(10);
     //FORMATTING FOR PROMPTS//
@@ -18,7 +19,7 @@ ATM = (function() {
     prompt.message = "";
     prompt.delimiter = " ";
     // ATM PROPERTIES//
-    this.atmStatus = "ON"
+    this.atmStatus = "ON";
     this.accounts = [];
 
     //PRIVATE METHODS//
@@ -101,6 +102,22 @@ ATM = (function() {
       promptAnotherTransaction.call(this);
     };
 
+    withdrawFundsCallback = function (err, choice) {
+      if (err) {return}
+      console.log("\n\n\n\n\n\n\n\n\n\n");
+      var withdrawalAmount = choice["withdraw funds"],
+      balance = this.withdrawFunds(withdrawalAmount),
+      balanceString = balance.toString(10).red;
+      //LOG ERROR TO CONSOLE IF BALANCE ISN'T ENOUGH TO COVER REQUEST//
+      //AND GIVE USER OPTION TO END SESSION//
+      if (balance === "insufficient funds") {
+        console.error("insufficient funds for requested transaction".red);
+        return promptAnotherTransaction.call(this);
+      }
+      console.log("success! your new balance is: ", balanceString);
+      promptAnotherTransaction.call(this);
+    };
+
 
 
     transactionMenuCallback = function(err, choice) {
@@ -129,7 +146,9 @@ ATM = (function() {
           break;
         case "4":
           //WITHDRAW FUNDS//
-
+          console.log(promptSchemas["withdrawFunds"]["properties"]["withdraw funds"]["menu"]);
+          prompt.get( promptSchemas.withdrawFunds, withdrawFundsCallback.bind(this) );
+          clearTimeout(promptTimeOut);
           break;
         case "5":
           //DEPOSIT FUNDS//

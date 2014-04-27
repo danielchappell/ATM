@@ -30,13 +30,13 @@ describe("ATM", function() {
     var inSession,
     atm = new ATM(),
     userNum = atm.newAccount(5000, '4242'),
-    credentials = {"account number": 1, "pin": "4242"};
+    credentials = {"account number": userNum, "pin": "4242"};
     it("should be able to start new bank session", function () {
       inSession = atm.startSession(null, credentials);
       expect(inSession).to.equal("session started");
     });
     it("should validate user", function() {
-      var credentials = {"account number": 1, "pin": "5000"};
+      var credentials = {"account number": userNum, "pin": "5000"};
       inSession = atm.startSession(null, credentials);
       expect(inSession).to.equal("invalid credentials")
     });
@@ -49,6 +49,16 @@ describe("ATM", function() {
       user = atm.accounts[userNum - 1];
       expect(user.constructor.name).to.equal("Account");
       expect(atm.accounts.length).to.equal(1);
+    });
+  });
+  describe("checkBalance", function(){
+    var atm = new ATM(),
+    userNum = atm.newAccount(5000, '4242'),
+    credentials = {"account number": userNum, "pin": "4242"};
+    atm.startSession(null, credentials);
+    it("should be able to retrieve user's balance", function(){
+      var balance = atm.checkBalance();
+      expect(balance).to.equal(5000);
     });
   });
 });

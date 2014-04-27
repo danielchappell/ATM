@@ -61,4 +61,16 @@ describe("ATM", function() {
       expect(balance).to.equal(5000);
     });
   });
+  describe("withdrawFunds", function(){
+    var atm = new ATM();
+    userNum = atm.newAccount(5000, '4242'),
+    credentials = {"account number": userNum, "pin": "4242"};
+    atm.startSession(null, credentials);
+    it("should be able to withdraw from user account", function() {
+      var balance = atm.checkBalance();
+      expect(balance).to.equal(5000);
+      balance = atm.withdrawFunds(500);
+      expect(balance).to.equal(4500);
+    });
+  });
 });

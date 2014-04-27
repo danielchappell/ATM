@@ -21,14 +21,13 @@ ATM = (function() {
     //PRIVATE METHODS//
 
     clearScreen = function() {
-      console.log('\033[2J');
+      process.stdout.write('\u001B[2J\u001B[0;0f');
     };
 
 
     //UI CALLBACK METHODS//
     defaultScreenCallback = function(err, choice) {
       clearScreen();
-      if (err) { return this.on() }
       //IF RESULT IS 1 START LOGIN PROCCESS IF 2 START NEW USER REGISTRATION//
       if (choice["default screen"] === "1") {
         prompt.get( promptSchemas.loginSchema, this.startSession.bind(this) );
@@ -44,6 +43,7 @@ ATM = (function() {
       clearScreen();
       if (err) {return}
       if ( credentials["secure pin"] !== credentials["verify pin"] ) {
+        console.log("pin verification did not match");
         return prompt.get( promptSchemas.userRegistration, userRegistrationCallback.bind(this) );
       }
       var initDeposit = credentials["initial deposit"],

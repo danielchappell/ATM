@@ -28,7 +28,7 @@ var Account = (function() {
             return
           }
           newEntry = [new Date(), transactionType, difference, newBalance];
-          accountLedger.push(newEntry);
+          accountLedger.shift(newEntry);
         }
 
         changeBalance = function(newBalance) {

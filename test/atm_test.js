@@ -110,6 +110,7 @@ describe("ATM", function() {
       for ( var _i = 0, _length = ledger.length; _i < _length; _i++ ) {
         expect(ledger[_i]).to.equal(expectation[_i]);
       }
+      //RESTORE TIME//
       clock.restore();
     });
   });

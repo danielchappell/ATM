@@ -84,7 +84,20 @@ promptSchemas = {
         required: true
       }
     }
+  },
+
+  newPin: {
+    properties: {
+      "new pin": {
+        description: "new pin".green,
+        pattern: /[0-9][0-9][0-9][0-9]/,
+        message: "must be a 4 digit number..".red,
+        required: true,
+        hidden: true
+      }
+    }
   }
+
 };
 
 module.exports = promptSchemas;

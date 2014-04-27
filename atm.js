@@ -114,7 +114,13 @@ ATM = (function() {
         return "insufficient funds"
       }
     };
-
+    this.depositFunds = function(amount) {
+      var newBalance,
+      balance = this.checkBalance();
+      newBalance = balance + amount;
+      balance = session.editBalance(sessionPin, bankID, newBalance);
+      return balance;
+    }
 
   }
   return ATM

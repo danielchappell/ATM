@@ -52,7 +52,7 @@ ATM = (function() {
         console.error("pin verification did not match");
         return prompt.get( promptSchemas.userRegistration, userRegistrationCallback.bind(this) );
       }
-      var initDeposit = credentials["initial deposit"],
+      var initDeposit = parseFloat( credentials["initial deposit"] ),
       initPin = credentials["secure pin"],
       accountNumber = this.newAccount(initDeposit, initPin),
       accountNumberString = accountNumber.toString(10).red;
@@ -72,7 +72,8 @@ ATM = (function() {
 
     anotherTransactionCallback = function(err, choice) {
       if (err) {return}
-      if ( choice["another transaction?"] === "yes" || choice["another transaction?"] === "y" ) {
+      var answer = choice["another transaction?"].toLowerCase()
+      if ( answer === "yes" || answer === "y" ) {
         transactionMenu.call(this);
       }
       else {
@@ -93,6 +94,7 @@ ATM = (function() {
       newPin = choice["new pin"];
       error = session.setNewPin(sessionPin, bankID, newPin);
       console.log("\n\n");
+      //IF SOMEHOW VALIDATION FAILES ON THIS METHOD, THE SESSION IS IMMEDIATELY TERMINATED//
       if (error) {
         console.log("error: pin not set, ending session..".red);
         return this.endSession();
@@ -102,22 +104,31 @@ ATM = (function() {
       promptAnotherTransaction.call(this);
     };
 
-    withdrawFundsCallback = function (err, choice) {
+    withdrawFundsCallback = function (err, amount) {
       if (err) {return}
-      console.log("\n\n\n\n\n\n\n\n\n\n");
-      var withdrawalAmount = choice["withdraw funds"],
+      console.log("\n\n\n\n\n\n\n\n");
+      var withdrawalAmount = parseInt(amount["withdraw funds"], 10),
       balance = this.withdrawFunds(withdrawalAmount),
-      balanceString = balance.toString(10).red;
+      balanceString = "$" + balance.toString(10).red;
       //LOG ERROR TO CONSOLE IF BALANCE ISN'T ENOUGH TO COVER REQUEST//
       //AND GIVE USER OPTION TO END SESSION//
       if (balance === "insufficient funds") {
         console.error("insufficient funds for requested transaction".red);
         return promptAnotherTransaction.call(this);
       }
-      console.log("success! your new balance is: ", balanceString);
+      console.log("success! your new balance is: ".blue, balanceString);
       promptAnotherTransaction.call(this);
     };
 
+    depositFundsCallback = function (err, amount) {
+      if (err) {return}
+      console.log("\n\n\n\n\n\n\n\n");
+      var depositAmount =  parseFloat( amount["deposit funds"] ),
+      balance = this.depositFunds(depositAmount),
+      balanceString = "$" + balance.toString(10).red;
+      console.log("success! your new balance is: ".blue, balanceString);
+      promptAnotherTransaction.call(this);
+    };
 
 
     transactionMenuCallback = function(err, choice) {
@@ -126,34 +137,36 @@ ATM = (function() {
       var promptTimeOut = setTimeout(promptAnotherTransaction.bind(this), 1500);
       console.log("\n\n")
       switch (choice["transaction menu"]) {
-        case "1":
-            //CHECK BALANCE//
-            var balance = "your balance is:  $" + this.checkBalance();
-            console.log(balance.blue);
-            promptAnotherTransaction.call(this);
-            clearTimeout(promptTimeOut);
-          break;
-        case "2":
-          //PRINT ACCOUNT LEDGER//
-          this.printLedger();
-          promptAnotherTransaction.call(this);
-          clearTimeout(promptTimeOut);
-          break;
-        case "3":
-          //CHANGE PIN NUMBER//
-          prompt.get( promptSchemas.newPin, newPinCallback.bind(this) );
-          clearTimeout(promptTimeOut);
-          break;
-        case "4":
-          //WITHDRAW FUNDS//
-          console.log(promptSchemas["withdrawFunds"]["properties"]["withdraw funds"]["menu"]);
-          prompt.get( promptSchemas.withdrawFunds, withdrawFundsCallback.bind(this) );
-          clearTimeout(promptTimeOut);
-          break;
-        case "5":
-          //DEPOSIT FUNDS//
+      case "1":
+        //CHECK BALANCE//
+        var balance = "your balance is:  $" + this.checkBalance();
+        console.log(balance.blue);
+        promptAnotherTransaction.call(this);
+        clearTimeout(promptTimeOut);
+        break;
+      case "2":
+        //PRINT ACCOUNT LEDGER//
+        this.printLedger();
+        promptAnotherTransaction.call(this);
+        clearTimeout(promptTimeOut);
+        break;
+      case "3":
+        //CHANGE PIN NUMBER//
+        prompt.get( promptSchemas.newPin, newPinCallback.bind(this) );
+        clearTimeout(promptTimeOut);
+        break;
+      case "4":
+        //WITHDRAW FUNDS//
+        console.log(promptSchemas["withdrawFunds"]["properties"]["withdraw funds"]["menu"]);
+        prompt.get( promptSchemas.withdrawFunds, withdrawFundsCallback.bind(this) );
+        clearTimeout(promptTimeOut);
+        break;
+      case "5":
+        //DEPOSIT FUNDS//
+        console.log(promptSchemas["depositFunds"]["properties"]["deposit funds"]["menu"]);
+        prompt.get( promptSchemas.depositFunds, depositFundsCallback.bind(this) );
+        clearTimeout(promptTimeOut);
       }
-
     };
 
     //PUBLIC && TESTABLE METHODS//
@@ -176,6 +189,7 @@ ATM = (function() {
     };
     //STARTS BANKING SESSION BY VERIFYING USER//
     this.startSession = function(err, credentials, newUser) {
+      if (err) {return}
       var accountNumber = credentials["account number"];
       //MAKE SURE ACCOUNT IS ON FILE//
       if ( this.accounts[accountNumber - 195342] instanceof Account) {

@@ -8,7 +8,7 @@ prompt = require('prompt');
 ATM = (function() {
   function ATM() {
     //PRIVATE KEYS AND DATA//
-    var bankID, session, sessionPin, defaultScreenCallback, userRegistrationCallback;
+    var bankID, session, sessionPin, defaultScreenCallback, userRegistrationCallback, clearScreen;
     bankID = Math.floor(Math.random() * 1000000000000000).toString(10);
     //FORMATTING FOR PROMPTS//
     prompt.start();
@@ -20,8 +20,14 @@ ATM = (function() {
 
     //PRIVATE METHODS//
 
+    clearScreen = function() {
+      console.log('\033[2J');
+    };
+
+
     //UI CALLBACK METHODS//
     defaultScreenCallback = function(err, choice) {
+      clearScreen();
       if (err) { return this.on() }
       //IF RESULT IS 1 START LOGIN PROCCESS IF 2 START NEW USER REGISTRATION//
       if (choice["default screen"] === "1") {
@@ -29,14 +35,16 @@ ATM = (function() {
       }
       else{
         //START NEW USER REGISTRATION PROCCESS//
-        prompt.get( promptSchemas.userRegistration, this.userRegistrationCallback.bind(this) );
+        prompt.get( promptSchemas.userRegistration, userRegistrationCallback.bind(this) );
       }
     };
 
     userRegistrationCallback = function(err, credentials) {
       //IF ERROR OR PIN AND VERIFICATION DON'T MATCH RE-PROMPT//
-      if ( err || credentials["secure pin"] !== credentials["verify pin"] ) {
-        return prompt.get( promptSchemas.userRegistration, this.userRegistrationCallback.bind(this) );
+      clearScreen();
+      if (err) {return}
+      if ( credentials["secure pin"] !== credentials["verify pin"] ) {
+        return prompt.get( promptSchemas.userRegistration, userRegistrationCallback.bind(this) );
       }
       var initDeposit = credentials["initial deposit"],
       initPin = credentials["secure pin"];
@@ -53,6 +61,7 @@ ATM = (function() {
     };
     //STARTS AUTOMATION-WAITS FOR USER TO START SESSION//
     this.on = function() {
+      clearScreen();
       session = null;
       sessionPin = null;
       prompt.get( promptSchemas.defaultSchema, defaultScreenCallback.bind(this) );
@@ -166,3 +175,7 @@ ATM = (function() {
 })();
 
 module.exports = ATM
+
+//START PROGRAM//
+newATM = new ATM();
+newATM.on();

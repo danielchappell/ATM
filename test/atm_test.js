@@ -72,5 +72,9 @@ describe("ATM", function() {
       balance = atm.withdrawFunds(500);
       expect(balance).to.equal(4500);
     });
+    it("should not be able to withdraw more than current balance", function() {
+      var error = atm.withdrawFunds(6000);
+      expect(error).to.equal("insufficient funds");
+    });
   });
 });

@@ -37,9 +37,9 @@ promptSchemas = {
   userRegistration: {
     properties: {
       "initial deposit": {
-        description: "initial deposit: format: $00.00:".green,
-        pattern: /[0-9]+\.[0-9][0-9]/,
-        message: "format must include dollar sign and two decimals: $1500.00".red,
+        description: "initial deposit: format: 00.00:".green,
+        pattern: /^[0-9]+\.[0-9][0-9]$/,
+        message: "format two decimals: 1500.00".red,
         required: true
       },
       "secure pin": {
@@ -68,7 +68,22 @@ promptSchemas = {
         required: true
       }
     }
+  },
 
+  transactionMenu: {
+    properties: {
+      "transaction menu": {
+        menu: "Transaction Menu:\n".blue +
+              "enter 1 for balance inquery\n".blue +
+              "enter 2 to print account ledger\n".blue +
+              "enter 3 to change pin number\n".blue +
+              "enter 4 to withdraw funds\n".blue +
+              "enter 5 to deposit funds\n".blue,
+        description: "enter choice 1-5".green,
+        pattern: /[1-5]/,
+        required: true
+      }
+    }
   }
 };
 

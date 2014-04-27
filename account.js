@@ -53,7 +53,7 @@ var Account = (function() {
             setPin(newPin);
           }
           else {
-            return "INVALID PIN";
+            return "invalid credentials";
           }
         };
 
@@ -62,7 +62,7 @@ var Account = (function() {
             return userBalance;
           }
           else {
-            return "INVALID PIN";
+            return "invalid credentials";
           }
         };
 
@@ -71,7 +71,7 @@ var Account = (function() {
             return accountLedger;
           }
           else {
-            return "INVALID PIN";
+            return "invalid credentials";
           }
         };
 
@@ -81,7 +81,7 @@ var Account = (function() {
             return userBalance;
           }
           else{
-            return "INVALID PIN"
+            return "invalid credentials"
           }
         };
       }

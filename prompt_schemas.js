@@ -50,6 +50,17 @@ var promptSchemas = {
         hidden: true
       }
     }
+  },
+
+  anotherTransaction: {
+    properties: {
+      "another transaction?": {
+        pattern: /y[es]*|n[o]?/,
+        message: "must answer yes or no..",
+        required: true
+      }
+    }
+
   }
 };
 

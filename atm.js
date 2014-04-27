@@ -8,7 +8,8 @@ prompt = require('prompt');
 ATM = (function() {
   function ATM() {
     //PRIVATE KEYS AND DATA//
-    var bankID, session, sessionPin, defaultScreenCallback, userRegistrationCallback, clearScreen;
+    var bankID, session, sessionPin, defaultScreenCallback, userRegistrationCallback,
+     anotherTransactionCallback, clearScreen;
     bankID = Math.floor(Math.random() * 1000000000000000).toString(10);
     //FORMATTING FOR PROMPTS//
     prompt.start();
@@ -28,6 +29,7 @@ ATM = (function() {
     //UI CALLBACK METHODS//
     defaultScreenCallback = function(err, choice) {
       clearScreen();
+      if (err) {return}
       //IF RESULT IS 1 START LOGIN PROCCESS IF 2 START NEW USER REGISTRATION//
       if (choice["default screen"] === "1") {
         prompt.get( promptSchemas.loginSchema, this.startSession.bind(this) );
@@ -43,14 +45,29 @@ ATM = (function() {
       clearScreen();
       if (err) {return}
       if ( credentials["secure pin"] !== credentials["verify pin"] ) {
-        console.log("pin verification did not match");
+        console.error("pin verification did not match");
         return prompt.get( promptSchemas.userRegistration, userRegistrationCallback.bind(this) );
       }
       var initDeposit = credentials["initial deposit"],
-      initPin = credentials["secure pin"];
-      this.newAccount(initDeposit, initPin);
+      initPin = credentials["secure pin"],
+      accountNumber = this.newAccount(initDeposit, initPin);
+      this.startSession( err, {"account number": accountNumber, "pin": initPin} );
+      prompt.get( promptSchemas.anotherTransaction, anotherTransactionCallback.bind(this) );
     };
-    //PUBLIC METHODS//
+
+    anotherTransactionCallback = function(err, choice) {
+      clearScreen();
+      if (err) {return}
+        if ( choice["another transaction?"] === "yes" || choice["another transaction?"] === "y" ) {
+          //MAIN TRANSACTION PROMPT
+        }
+        else {
+          //ENDS SESSION AND RESETS FOR NEXT USER//
+          this.endSession();
+        }
+    }
+
+    //PUBLIC && TESTABLE METHODS//
 
     //CREATES SECURE NEW BANK ACCOUNTS//
     this.newAccount = function(initDeposit, initPin) {

@@ -46,7 +46,7 @@ describe("Account", function() {
     });
     it("should log error if pin is invalid", function() {
       var balance = user.retrieveBalance('5000', bankID);
-      expect(balance).to.equal('INVALID PIN');
+      expect(balance).to.equal('invalid credentials');
     });
   });
   describe("retrieveLedger", function() {

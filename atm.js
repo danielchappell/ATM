@@ -11,11 +11,13 @@ ATM = (function() {
     //PRIVATE KEYS AND DATA//
     var bankID, session, sessionPin, defaultScreenCallback,userRegistrationCallback, transactionMenu,
       transactionMenuCallback, promptAnotherTransaction, anotherTransactionCallback, clearScreen;
+    //ENSURES ONLY BANK THAT CREATED ACCOUNT CAN SUCCESSFULLY CALL ACCOUNT METHODS//
     bankID = Math.floor(Math.random() * 1000000000000000).toString(10);
     //FORMATTING FOR PROMPTS//
     prompt.start();
     prompt.message = "";
     prompt.delimiter = " ";
+    prompt.logger.setMaxListeners(20);
     // ATM PROPERTIES//
     this.atmStatus = "ON"
     this.accounts = [];
@@ -68,7 +70,6 @@ ATM = (function() {
       }
       else {
         //ENDS SESSION AND RESETS FOR NEXT USER//
-        // console.log(this);
         this.endSession();
       }
     };
@@ -209,6 +210,17 @@ ATM = (function() {
         return "invalid session";
       }
     };
+
+    this.changePin = function(newPin) {
+      if (session) {
+        session.setNewPin(sessionPin, bankID, newPin);
+        sessionPin = newPin;
+        return session.validate(sessionPin, bankID);
+      }
+      else {
+        return "invalid session";
+      }
+    }
 
     this.withdrawFunds = function(amount) {
       if (session) {

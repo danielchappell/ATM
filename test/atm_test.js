@@ -109,7 +109,7 @@ describe("ATM", function() {
       ledger = atm.printLedger();
       expectation = [
         "Saturday, April 26, 2014 23:52:40    Debit    -2000  $3500.00",
-        "Saturday, April 26, 2014 23:52:40    Credit    +500  $5500.00"
+        "Saturday, April 26, 2014 23:52:40    Credit    +500.00  $5500.00"
       ];
       //EXPECT EACH ENTRY TO MATCH//
       for ( var _i = 0, _length = ledger.length; _i < _length; _i++ ) {

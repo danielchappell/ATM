@@ -8,9 +8,10 @@ prompt = require('prompt');
 ATM = (function() {
   function ATM() {
     //PRIVATE KEYS AND DATA//
-    var bankID, session, sessionPin, loginSchema, defaultSchema;
+    var bankID, session, sessionPin, defaultScreenCallback, userRegistrationCallback;
     bankID = Math.floor(Math.random() * 1000000000000000).toString(10);
     //FORMATTING FOR PROMPTS//
+    prompt.start();
     prompt.message = "";
     prompt.delimiter = " ";
     // ATM PROPERTIES//
@@ -18,16 +19,29 @@ ATM = (function() {
     this.accounts = [];
 
     //PRIVATE METHODS//
+
+    //UI CALLBACK METHODS//
     defaultScreenCallback = function(err, choice) {
+      if (err) { return this.on() }
       //IF RESULT IS 1 START LOGIN PROCCESS IF 2 START NEW USER REGISTRATION//
       if (choice["default screen"] === "1") {
         prompt.get( promptSchemas.loginSchema, this.startSession.bind(this) );
       }
       else{
         //START NEW USER REGISTRATION PROCCESS//
-
+        prompt.get( promptSchemas.userRegistration, this.userRegistrationCallback.bind(this) );
       }
-    }
+    };
+
+    userRegistrationCallback = function(err, credentials) {
+      //IF ERROR OR PIN AND VERIFICATION DON'T MATCH RE-PROMPT//
+      if ( err || credentials["secure pin"] !== credentials["verify pin"] ) {
+        return prompt.get( promptSchemas.userRegistration, this.userRegistrationCallback.bind(this) );
+      }
+      var initDeposit = credentials["initial deposit"],
+      initPin = credentials["secure pin"];
+      this.newAccount(initDeposit, initPin);
+    };
     //PUBLIC METHODS//
 
     //CREATES SECURE NEW BANK ACCOUNTS//

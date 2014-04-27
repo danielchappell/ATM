@@ -15,7 +15,7 @@ ATM = (function() {
     defaultSchema = {
       properties: {
         "default screen": {
-          description: "Welcome to the ATM, choose 1 for transaction or 2 to open a new account",
+          description: "Welcome to the ATM!\nChoose 1 for transaction or 2 to open a new account..",
           pattern: /[12]/,
           message: "please choose 1 for transaction or 2 for new account",
           required: true
@@ -99,6 +99,20 @@ ATM = (function() {
       //USES SESSION VARIABLES FOR SECURITY PURPOSES//
       var balance = session.retrieveBalance(sessionPin, bankID);
       return balance;
+    };
+
+    this.withdrawFunds = function(amount) {
+      var newBalance,
+      balance = this.checkBalance();
+      if (balance > amount) {
+        newBalance = balance - amount;
+        balance = session.editBalance(sessionPin, bankID, newBalance);
+        return balance;
+      }
+      else {
+        //NOT ENOUGH FUNDS FOR WITHDRAWAL//
+        return "insufficient funds"
+      }
     };
 
 

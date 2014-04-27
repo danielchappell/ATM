@@ -27,7 +27,7 @@ promptSchemas = {
       "pin": {
         description: "pin".green,
         pattern: /[0-9][0-9][0-9][0-9]/,
-        message: "pin must be 4 digit number..",
+        message: "pin must be 4 digit number..".red,
         required: true,
         hidden: true
       }
@@ -39,20 +39,20 @@ promptSchemas = {
       "initial deposit": {
         description: "initial deposit: format: $00.00:".green,
         pattern: /[0-9]+\.[0-9][0-9]/,
-        message: "format must include dollar sign and two decimals: $1500.00",
+        message: "format must include dollar sign and two decimals: $1500.00".red,
         required: true
       },
       "secure pin": {
-        description: "secure pin: 4 digit number:".green
+        description: "secure pin: 4 digit number:".green,
         pattern: /[0-9][0-9][0-9][0-9]/,
-        message: "must be a 4 digit number..",
+        message: "must be a 4 digit number..".red,
         required: true,
         hidden: true
       },
       "verify pin": {
         description: "verify pin".green,
         pattern: /[0-9][0-9][0-9][0-9]/,
-        message: "must be a 4 digit number..",
+        message: "must be a 4 digit number..".red,
         required: true,
         hidden: true
       }
@@ -64,7 +64,7 @@ promptSchemas = {
       "another transaction?": {
         description: "another transaction?".green,
         pattern: /y[es]*|n[o]?/,
-        message: "must answer yes or no..",
+        message: "must answer yes or no..".red,
         required: true
       }
     }

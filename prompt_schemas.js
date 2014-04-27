@@ -104,7 +104,7 @@ promptSchemas = {
         menu: "how much would you like to withdraw?\n".blue +
               "  amount must be despensable in $20 bills..".blue,
         description: "withdraw:".green,
-        pattern: /^[1-9]*[02468]0$/,
+        pattern: /^[0-9]*[02468]0$/,
         message: "must be divisible by 20..".red,
         required: true
       }

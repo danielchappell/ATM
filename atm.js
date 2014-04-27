@@ -106,6 +106,30 @@ ATM = (function() {
       }
     };
 
+    this.printLedger = function() {
+      if (session) {
+        var unformattedLedger, formattedLedger, entryArray, date, string;
+        unformattedLedger = session.retrieveLedger(sessionPin, bankID);
+        formattedLedger = [];
+        //LOOP THROUGH FORMAT AND PRINT EACH ENTRY//
+        for ( var _i = 0, _length = unformattedLedger.length; _i < _length; _i++ ) {
+          entryArray = unformattedLedger[_i];
+          date = entryArray[0];
+          string = date.toLocaleDateString() + " "  +
+            date.toLocaleTimeString() + "    " +
+            entryArray[1] + "    " + entryArray[2] +
+            "  $" + entryArray[3].toFixed(2);
+          formattedLedger.push(string);
+          //PRINT EACH ENTRY TO THE SCREEN//
+          console.log(string);
+        }
+        return formattedLedger;
+      }
+      else{
+        return "invalid session";
+      }
+    };
+
     this.withdrawFunds = function(amount) {
       if (session) {
         var newBalance,
@@ -139,10 +163,12 @@ ATM = (function() {
     };
 
     this.endSession = function () {
-      session = null;
-      sessionPin = null;
-      this.on();
-    }
+      if (session) {
+        session = null;
+        sessionPin = null;
+        this.on();
+      }
+    };
 
   }
   return ATM

@@ -22,7 +22,7 @@ var Account = (function() {
           }
           else if (userBalance < newBalance) {
             transactionType = "Credit";
-            difference = "+" + (newBalance - userBalance);
+            difference = "+" + (newBalance - userBalance).toFixed(2);
           }
           else{
             return

@@ -63,7 +63,7 @@ promptSchemas = {
     properties: {
       "another transaction?": {
         description: "another transaction?".green,
-        pattern: /y[es]*|n[o]?/,
+        pattern: /y[es]*|n[o]?/i,
         message: "must answer yes or no..".red,
         required: true
       }
@@ -109,8 +109,20 @@ promptSchemas = {
         required: true
       }
     }
-  }
+  },
 
+  depositFunds: {
+    properties: {
+      "deposit funds": {
+        menu: "how much would you like to deposit today?\n".blue +
+              "  I accept $20 bills and personal checks of all amounts..".blue,
+        description: "deposit funds: format 00.00:".green,
+        pattern: /[0-9]+\.[0-9][0-9]/,
+        message: "include to two decimal places".red,
+        required: true
+      }
+    }
+  }
 };
 
 module.exports = promptSchemas;

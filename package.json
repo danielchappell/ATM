@@ -15,6 +15,7 @@
     "sinon": "^1.9.1"
   },
   "dependencies": {
-    "prompt": "^0.2.12"
+    "prompt": "^0.2.12",
+    "colors": "^0.6.2"
   }
 }

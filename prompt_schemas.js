@@ -33,20 +33,17 @@ var promptSchemas = {
   userRegistration: {
     properties: {
       "initial deposit": {
-        description: "please enter an initial deposit\nin the following format: $1500.00",
         pattern: /[0-9]+\.[0-9][0-9]/,
         message: "format must include dollar sign and two decimals: $1500.00",
         required: true
       },
       "secure pin": {
-        description: "enter a 4 digit number that will\nserve as your secure pin..",
         pattern: /[0-9][0-9][0-9][0-9]/,
         message: "must be a 4 digit number..",
         required: true,
         hidden: true
       },
       "verify pin": {
-        description: "verify your pin number..",
         pattern: /[0-9][0-9][0-9][0-9]/,
         message: "must be a 4 digit number..",
         required: true,

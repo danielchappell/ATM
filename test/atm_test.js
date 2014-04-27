@@ -51,17 +51,17 @@ describe("ATM", function() {
       expect(atm.accounts.length).to.equal(1);
     });
   });
-  describe("checkBalance", function(){
+  describe("checkBalance", function() {
     var atm = new ATM(),
     userNum = atm.newAccount(5000, '4242'),
     credentials = {"account number": userNum, "pin": "4242"};
     atm.startSession(null, credentials);
-    it("should be able to retrieve user's balance", function(){
+    it("should be able to retrieve user's balance", function() {
       var balance = atm.checkBalance();
       expect(balance).to.equal(5000);
     });
   });
-  describe("withdrawFunds", function(){
+  describe("withdrawFunds", function() {
     var atm = new ATM();
     userNum = atm.newAccount(5000, '4242'),
     credentials = {"account number": userNum, "pin": "4242"};
@@ -77,16 +77,31 @@ describe("ATM", function() {
       expect(error).to.equal("insufficient funds");
     });
   });
-  describe("depositFunds", function(){
+  describe("depositFunds", function() {
     var atm = new ATM();
     userNum = atm.newAccount(5000, '4242'),
     credentials = {"account number": userNum, "pin": "4242"};
     atm.startSession(null, credentials);
-    it("should be able to deposit funds", function(){
+    it("should be able to deposit funds", function() {
       balance = atm.checkBalance();
       expect(balance).to.equal(5000);
       balance = atm.depositFunds(1000);
       expect(balance).to.equal(6000);
+    });
+  });
+  describe("endSession", function() {
+    var atm = new ATM();
+    userNum = atm.newAccount(5000, '4242'),
+    credentials = {"account number": userNum, "pin": "4242"};
+    atm.startSession(null, credentials);
+    it("should be able to end a user session", function() {
+      //CAN PERFORM TRANSACTIONS WHILE AUTHENTICATED//
+      balance = atm.checkBalance();
+      expect(balance).to.equal(5000);
+      //OUT OF SESSION TRANSACTIONS RESULT IN ERRORS//
+      atm.endSession();
+      error = atm.checkBalance();
+      expect(error).to.equal("invalid session");
     });
   });
 });

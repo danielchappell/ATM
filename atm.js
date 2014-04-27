@@ -76,7 +76,6 @@ ATM = (function() {
         pin = credentials["pin"];
         //RUN VALIDATION TO START SECURE SESSION//
         verified = this.accounts[accountNumber - 1].validate(pin, bankID);
-        console.log("come on now!!", verified);
         if (verified) {
           session = this.accounts[accountNumber - 1];
           sessionPin = pin;
@@ -94,6 +93,12 @@ ATM = (function() {
         console.error("invalid account number");
         return "invalid account";
       }
+    };
+
+    this.checkBalance = function() {
+      //USES SESSION VARIABLES FOR SECURITY PURPOSES//
+      var balance = session.retrieveBalance(sessionPin, bankID);
+      return balance;
     };
 
 

@@ -96,30 +96,52 @@ ATM = (function() {
     };
 
     this.checkBalance = function() {
-      //USES SESSION VARIABLES FOR SECURITY PURPOSES//
-      var balance = session.retrieveBalance(sessionPin, bankID);
-      return balance;
+      if (session) {
+        //USES SESSION VARIABLES FOR SECURITY PURPOSES//
+        var balance = session.retrieveBalance(sessionPin, bankID);
+        return balance;
+      }
+      else {
+        return "invalid session";
+      }
     };
 
     this.withdrawFunds = function(amount) {
-      var newBalance,
-      balance = this.checkBalance();
-      if (balance > amount) {
-        newBalance = balance - amount;
+      if (session) {
+        var newBalance,
+        balance = this.checkBalance();
+        if (balance > amount) {
+          newBalance = balance - amount;
+          balance = session.editBalance(sessionPin, bankID, newBalance);
+          return balance;
+        }
+        else {
+          //NOT ENOUGH FUNDS FOR WITHDRAWAL//
+          return "insufficient funds";
+        }
+      }
+      else {
+        return "invalid session";
+      }
+    };
+
+    this.depositFunds = function(amount) {
+      if (session) {
+        var newBalance,
+        balance = this.checkBalance();
+        newBalance = balance + amount;
         balance = session.editBalance(sessionPin, bankID, newBalance);
         return balance;
       }
       else {
-        //NOT ENOUGH FUNDS FOR WITHDRAWAL//
-        return "insufficient funds"
+        return "invalid session";
       }
     };
-    this.depositFunds = function(amount) {
-      var newBalance,
-      balance = this.checkBalance();
-      newBalance = balance + amount;
-      balance = session.editBalance(sessionPin, bankID, newBalance);
-      return balance;
+
+    this.endSession = function () {
+      session = null;
+      sessionPin = null;
+      this.on();
     }
 
   }

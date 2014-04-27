@@ -17,7 +17,6 @@ ATM = (function() {
     prompt.start();
     prompt.message = "";
     prompt.delimiter = " ";
-    prompt.logger.setMaxListeners(20);
     // ATM PROPERTIES//
     this.atmStatus = "ON"
     this.accounts = [];
@@ -54,12 +53,19 @@ ATM = (function() {
       }
       var initDeposit = credentials["initial deposit"],
       initPin = credentials["secure pin"],
-      accountNumber = this.newAccount(initDeposit, initPin);
+      accountNumber = this.newAccount(initDeposit, initPin),
+      accountNumberString = accountNumber.toString(10).red;
+      //FORMAT AND PROVIDE ACCOUNT NUMBER 1 TIME, DON'T LOOSE IT//
+      //RIDICULOUS AMOUNT OF NEW LINES TO PUSH TO CENTER OF TERMINAL SCREEN//
+      console.log( "\n\n\n\n\n\n\n\n\n\n\n","WRITE THIS DOWN: your account number is ".blue + accountNumberString );
       this.startSession( err, {"account number": accountNumber, "pin": initPin}, true );
     };
 
     promptAnotherTransaction = function(){
+      //THIS AND ALL OTHER SIMILAR LOGS ARE ONLY TO ADJUST//
+      // STD OUTPUT UI EXPERIENCE//
       console.log("\n\n\n\n");
+
       prompt.get( promptSchemas.anotherTransaction, anotherTransactionCallback.bind(this) );
     };
 
@@ -78,6 +84,21 @@ ATM = (function() {
       clearScreen();
       console.log(promptSchemas["transactionMenu"]["properties"]["transaction menu"]["menu"])
       prompt.get( promptSchemas.transactionMenu, transactionMenuCallback.bind(this) );
+    };
+
+    newPinCallback = function(err, choice) {
+      if (err) {return}
+      var error,
+      newPin = choice["new pin"];
+      error = session.setNewPin(sessionPin, bankID, newPin);
+      console.log("\n\n");
+      if (error) {
+        console.log("error: pin not set, ending session..".red);
+        return this.endSession();
+      }
+      sessionPin = newPin;
+      console.log("pin successfully changed!".blue);
+      promptAnotherTransaction.call(this);
     };
 
 
@@ -103,7 +124,8 @@ ATM = (function() {
           break;
         case "3":
           //CHANGE PIN NUMBER//
-
+          prompt.get( promptSchemas.newPin, newPinCallback.bind(this) );
+          clearTimeout(promptTimeOut);
           break;
         case "4":
           //WITHDRAW FUNDS//

@@ -1,5 +1,6 @@
 var chai = require('chai'),
 sinon = require('sinon'),
+prompt = require('prompt'),
 ATM = require('../atm.js'),
 expect = chai.expect;
 
@@ -7,6 +8,10 @@ expect = chai.expect;
 //TESTS FOR ATM.JS//
 
 describe("ATM", function() {
+  //PREVENT MEMORY LEAK IN TESTS CAUSED BY PROMPT BUILD UP WITH OUT RESPONSE//
+  //NOT AN ISSUE IN APPLICATION//
+  var stub = sinon.stub(prompt);
+
   describe('constructor', function() {
     var atm = new ATM();
     it("should initialize", function() {
@@ -90,7 +95,7 @@ describe("ATM", function() {
     });
   });
   describe("printLedger", function() {
-    //STUB TIME//
+    //STUB DATE//
     var fakeDate = new Date("Saturday, April 26, 2014 23:52:40").getTime(),
     clock = sinon.useFakeTimers(fakeDate),
     atm = new ATM(),
@@ -110,14 +115,33 @@ describe("ATM", function() {
       for ( var _i = 0, _length = ledger.length; _i < _length; _i++ ) {
         expect(ledger[_i]).to.equal(expectation[_i]);
       }
-      //RESTORE TIME//
+      //RESTORE DATE//
       clock.restore();
+    });
+  });
+  describe("changePin", function() {
+    var success,
+    atm = new ATM(),
+    userNum = atm.newAccount(5000, '4242'),
+    credentials = {"account number": userNum, "pin": "4242"};
+    prompt.logger.setMaxListeners(20);
+    atm.startSession(null, credentials);
+
+    it("should be able to change pin", function() {
+      success = atm.changePin("9933");
+      expect(success).to.equal(true);
+    });
+    it("cannot change the pin if session isn't authenticated", function() {
+      atm.endSession();
+      success = atm.changePin("2244");
+      expect(success).to.equal("invalid session");
     });
   });
   describe("endSession", function() {
     var atm = new ATM();
     userNum = atm.newAccount(5000, '4242'),
     credentials = {"account number": userNum, "pin": "4242"};
+    prompt.logger.setMaxListeners(20);
     atm.startSession(null, credentials);
     it("should be able to end a user session", function() {
       //CAN PERFORM TRANSACTIONS WHILE AUTHENTICATED//

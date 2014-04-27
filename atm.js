@@ -1,5 +1,6 @@
-var Account, prompt, ATM;
+var Account, prompt, promptSchemas, ATM;
 Account = require('./account.js');
+promptSchemas = require('./prompt_schemas.js');
 prompt = require('prompt');
 
 //ATM.JS//
@@ -12,30 +13,6 @@ ATM = (function() {
     //FORMATTING FOR PROMPTS//
     prompt.message = "";
     prompt.delimiter = " ";
-    defaultSchema = {
-      properties: {
-        "default screen": {
-          description: "Welcome to the ATM!\nChoose 1 for transaction or 2 to open a new account..",
-          pattern: /[12]/,
-          message: "please choose 1 for transaction or 2 for new account",
-          required: true
-        }
-      }
-    };
-    loginSchema = {
-      properties: {
-        "account number": {
-          pattern: /[0-9]+/,
-          message: "account number must contain only numbers",
-          required: true
-        },
-        pin: {
-          pattern: /[0-9][0-9][0-9][0-9]/,
-          message: "pin must be 4 digit number",
-          required: true
-        }
-      }
-    };
     // ATM PROPERTIES//
     this.atmStatus = "ON"
     this.accounts = [];
@@ -44,7 +21,7 @@ ATM = (function() {
     defaultScreenCallback = function(err, choice) {
       //IF RESULT IS 1 START LOGIN PROCCESS IF 2 START NEW USER REGISTRATION//
       if (choice["default screen"] === "1") {
-        prompt.get( loginSchema, this.startSession.bind(this) );
+        prompt.get( promptSchemas.loginSchema, this.startSession.bind(this) );
       }
       else{
         //START NEW USER REGISTRATION PROCCESS//
@@ -64,7 +41,7 @@ ATM = (function() {
     this.on = function() {
       session = null;
       sessionPin = null;
-      prompt.get( defaultSchema, defaultScreenCallback.bind(this) );
+      prompt.get( promptSchemas.defaultSchema, defaultScreenCallback.bind(this) );
       this.atmStatus = "LISTENING";
     };
     //STARTS BANKING SESSION BY VERIFYING USER//

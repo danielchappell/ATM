@@ -5,7 +5,7 @@
   "description": "Automatic Teller Machine",
   "main": "atm.js",
   "scripts": {
-    "test": "node atm.js"
+    "test": "node app.js"
   },
   "author": "Joseph Chappell",
   "license": "ISC",

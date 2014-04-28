@@ -33,7 +33,7 @@ ATM = (function() {
     //PERHAPS TEMPORARY//
     defaultScreenCallback = function(err, choice) {
       clearScreen();
-      if (err) {return}
+      if (err) { return; }
       //IF RESULT IS 1 START LOGIN PROCCESS IF 2 START NEW USER REGISTRATION//
       if (choice["default screen"] === "1") {
         prompt.get( promptSchemas.loginSchema, this.startSession.bind(this) );
@@ -47,7 +47,7 @@ ATM = (function() {
     userRegistrationCallback = function(err, credentials) {
       //IF ERROR OR PIN AND VERIFICATION DON'T MATCH RE-PROMPT//
       clearScreen();
-      if (err) {return}
+      if (err) { return; }
       if ( credentials["secure pin"] !== credentials["verify pin"] ) {
         console.error("pin verification did not match".red);
         return prompt.get( promptSchemas.userRegistration, userRegistrationCallback.bind(this) );
@@ -71,7 +71,7 @@ ATM = (function() {
     };
 
     anotherTransactionCallback = function(err, choice) {
-      if (err) {return}
+      if (err) { return; }
       var answer = choice["another transaction?"].toLowerCase();
       if ( answer === "yes" || answer === "y" ) {
         transactionMenu.call(this);
@@ -89,7 +89,7 @@ ATM = (function() {
     };
 
     newPinCallback = function(err, choice) {
-      if (err) {return}
+      if (err) { return; }
       var error,
       newPin = choice["new pin"];
       error = session.setNewPin(sessionPin, bankID, newPin);
@@ -105,7 +105,7 @@ ATM = (function() {
     };
 
     withdrawFundsCallback = function (err, amount) {
-      if (err) {return}
+      if (err) { return; }
       console.log("\n\n\n\n\n\n\n\n");
       var withdrawalAmount = parseInt(amount["withdraw funds"], 10),
       balance = this.withdrawFunds(withdrawalAmount),
@@ -121,7 +121,7 @@ ATM = (function() {
     };
 
     depositFundsCallback = function (err, amount) {
-      if (err) {return}
+      if (err) { return; }
       console.log("\n\n\n\n\n\n\n\n");
       var depositAmount =  parseFloat( amount["deposit funds"] ),
       balance = this.depositFunds(depositAmount),
@@ -132,7 +132,7 @@ ATM = (function() {
 
 
     transactionMenuCallback = function(err, choice) {
-      if (err) {return}
+      if (err) { return; }
       //SLIGHT DELAY AFTER TRANSACTION BEFORE PROMPTING FOR ANOTHER TRANSACTION//
       var promptTimeOut = setTimeout(promptAnotherTransaction.bind(this), 1500);
       console.log("\n\n");
@@ -162,6 +162,7 @@ ATM = (function() {
         clearTimeout(promptTimeOut);
         console.log(promptSchemas["depositFunds"]["properties"]["deposit funds"]["menu"]);
         prompt.get( promptSchemas.depositFunds, depositFundsCallback.bind(this) );
+        break;
       }
     };
 
@@ -185,9 +186,8 @@ ATM = (function() {
     };
     //STARTS BANKING SESSION BY VERIFYING USER//
     this.startSession = function(err, credentials, newUser) {
-      if (err) {return}
-      var onTimeout,
-      accountNumber = credentials["account number"];
+      if (err) { return; }
+      var accountNumber = credentials["account number"];
       //MAKE SURE ACCOUNT IS ON FILE//
       if ( this.accounts[accountNumber - 195342] instanceof Account) {
         var verified,
@@ -208,19 +208,15 @@ ATM = (function() {
           }
           return "session started";
         }
-        else {
-          //CREDENTIALS FAILED WRONG ACCOUNT NUMBER OR PIN//
-          onTimeout = setTimeout(this.on.bind(this), 2000);
-          console.error("bad credentials".red);
-          return "invalid credentials";
-        }
+        //CREDENTIALS FAILED WRONG ACCOUNT NUMBER OR PIN//
+        setTimeout(this.on.bind(this), 2000);
+        console.error("bad credentials".red);
+        return "invalid credentials";
       }
-      else {
-        //ACCOUNT DOESN'T EXIST FOR THIS BANK//
-        onTimeout = setTimeout(this.on.bind(this), 2000);
-        console.error("invalid account number".red);
-        return "invalid account";
-      }
+      //ACCOUNT DOESN'T EXIST FOR THIS BANK//
+      setTimeout(this.on.bind(this), 2000);
+      console.error("invalid account number".red);
+      return "invalid account";
     };
 
     this.checkBalance = function() {
@@ -229,9 +225,7 @@ ATM = (function() {
         var balance = session.retrieveBalance(sessionPin, bankID);
         return balance;
       }
-      else {
-        return "invalid session";
-      }
+      return "invalid session";
     };
 
     this.printLedger = function() {
@@ -260,9 +254,7 @@ ATM = (function() {
         }
         return formattedLedger;
       }
-      else{
-        return "invalid session";
-      }
+      return "invalid session";
     };
 
     this.changePin = function(newPin) {
@@ -271,10 +263,8 @@ ATM = (function() {
         sessionPin = newPin;
         return session.validate(sessionPin, bankID);
       }
-      else {
-        return "invalid session";
-      }
-    }
+      return "invalid session";
+    };
 
     this.withdrawFunds = function(amount) {
       if (session) {
@@ -285,14 +275,10 @@ ATM = (function() {
           balance = session.editBalance(sessionPin, bankID, newBalance);
           return balance;
         }
-        else {
-          //NOT ENOUGH FUNDS FOR WITHDRAWAL//
-          return "insufficient funds";
-        }
+        //NOT ENOUGH FUNDS FOR WITHDRAWAL//
+        return "insufficient funds";
       }
-      else {
-        return "invalid session";
-      }
+      return "invalid session";
     };
 
     this.depositFunds = function(amount) {
@@ -303,9 +289,7 @@ ATM = (function() {
         balance = session.editBalance(sessionPin, bankID, newBalance);
         return balance;
       }
-      else {
-        return "invalid session";
-      }
+      return "invalid session";
     };
 
     this.endSession = function () {
@@ -316,7 +300,7 @@ ATM = (function() {
       }
     };
   }
-  return ATM
+  return ATM;
 })();
 
-module.exports = ATM
+module.exports = ATM;

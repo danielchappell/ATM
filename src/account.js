@@ -25,11 +25,11 @@ var Account = (function() {
             difference = "+" + (newBalance - userBalance).toFixed(2);
           }
           else{
-            return
+            return;
           }
           newEntry = [new Date(), transactionType, difference, newBalance];
           accountLedger.unshift(newEntry);
-        }
+        };
 
         changeBalance = function(newBalance) {
           updateLedger(newBalance);
@@ -42,9 +42,7 @@ var Account = (function() {
           if (pin === userPin && bank === bankID) {
             return true;
           }
-          else {
-            return false;
-          }
+          return false;
         };
 
         this.setNewPin = function(pin, bank, newPin) {
@@ -60,18 +58,14 @@ var Account = (function() {
           if ( this.validate(pin, bank) ) {
             return userBalance;
           }
-          else {
-            return "invalid credentials";
-          }
+          return "invalid credentials";
         };
 
         this.retrieveLedger = function(pin, bank) {
           if ( this.validate(pin, bank) ) {
             return accountLedger;
           }
-          else {
-            return "invalid credentials";
-          }
+          return "invalid credentials";
         };
 
         this.editBalance = function(pin, bank, newBalance) {
@@ -79,9 +73,7 @@ var Account = (function() {
             changeBalance(newBalance);
             return userBalance;
           }
-          else{
-            return "invalid credentials";
-          }
+          return "invalid credentials";
         };
       }
       return Account;

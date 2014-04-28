@@ -80,7 +80,7 @@ var Account = (function() {
             return userBalance;
           }
           else{
-            return "invalid credentials"
+            return "invalid credentials";
           }
         };
       }

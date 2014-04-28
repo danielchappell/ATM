@@ -49,7 +49,7 @@ ATM = (function() {
       clearScreen();
       if (err) {return}
       if ( credentials["secure pin"] !== credentials["verify pin"] ) {
-        console.error("pin verification did not match");
+        console.error("pin verification did not match".red);
         return prompt.get( promptSchemas.userRegistration, userRegistrationCallback.bind(this) );
       }
       var initDeposit = parseFloat( credentials["initial deposit"] ),
@@ -72,7 +72,7 @@ ATM = (function() {
 
     anotherTransactionCallback = function(err, choice) {
       if (err) {return}
-      var answer = choice["another transaction?"].toLowerCase()
+      var answer = choice["another transaction?"].toLowerCase();
       if ( answer === "yes" || answer === "y" ) {
         transactionMenu.call(this);
       }
@@ -84,7 +84,7 @@ ATM = (function() {
 
     transactionMenu = function() {
       clearScreen();
-      console.log(promptSchemas["transactionMenu"]["properties"]["transaction menu"]["menu"])
+      console.log(promptSchemas["transactionMenu"]["properties"]["transaction menu"]["menu"]);
       prompt.get( promptSchemas.transactionMenu, transactionMenuCallback.bind(this) );
     };
 
@@ -135,20 +135,16 @@ ATM = (function() {
       if (err) {return}
       //SLIGHT DELAY AFTER TRANSACTION BEFORE PROMPTING FOR ANOTHER TRANSACTION//
       var promptTimeOut = setTimeout(promptAnotherTransaction.bind(this), 1500);
-      console.log("\n\n")
+      console.log("\n\n");
       switch (choice["transaction menu"]) {
       case "1":
         //CHECK BALANCE//
         var balance = "your balance is:  $" + this.checkBalance();
         console.log(balance.blue);
-        promptAnotherTransaction.call(this);
-        clearTimeout(promptTimeOut);
         break;
       case "2":
         //PRINT ACCOUNT LEDGER//
         this.printLedger();
-        promptAnotherTransaction.call(this);
-        clearTimeout(promptTimeOut);
         break;
       case "3":
         //CHANGE PIN NUMBER//
@@ -157,15 +153,15 @@ ATM = (function() {
         break;
       case "4":
         //WITHDRAW FUNDS//
+        clearTimeout(promptTimeOut);
         console.log(promptSchemas["withdrawFunds"]["properties"]["withdraw funds"]["menu"]);
         prompt.get( promptSchemas.withdrawFunds, withdrawFundsCallback.bind(this) );
-        clearTimeout(promptTimeOut);
         break;
       case "5":
         //DEPOSIT FUNDS//
+        clearTimeout(promptTimeOut);
         console.log(promptSchemas["depositFunds"]["properties"]["deposit funds"]["menu"]);
         prompt.get( promptSchemas.depositFunds, depositFundsCallback.bind(this) );
-        clearTimeout(promptTimeOut);
       }
     };
 
@@ -190,7 +186,8 @@ ATM = (function() {
     //STARTS BANKING SESSION BY VERIFYING USER//
     this.startSession = function(err, credentials, newUser) {
       if (err) {return}
-      var accountNumber = credentials["account number"];
+      var onTimeout,
+      accountNumber = credentials["account number"];
       //MAKE SURE ACCOUNT IS ON FILE//
       if ( this.accounts[accountNumber - 195342] instanceof Account) {
         var verified,
@@ -213,13 +210,15 @@ ATM = (function() {
         }
         else {
           //CREDENTIALS FAILED WRONG ACCOUNT NUMBER OR PIN//
-          console.error("bad credentials");
+          onTimeout = setTimeout(this.on.bind(this), 2000);
+          console.error("bad credentials".red);
           return "invalid credentials";
         }
       }
       else {
         //ACCOUNT DOESN'T EXIST FOR THIS BANK//
-        console.error("invalid account number");
+        onTimeout = setTimeout(this.on.bind(this), 2000);
+        console.error("invalid account number".red);
         return "invalid account";
       }
     };
@@ -281,7 +280,7 @@ ATM = (function() {
       if (session) {
         var newBalance,
         balance = this.checkBalance();
-        if (balance > amount) {
+        if (balance >= amount) {
           newBalance = balance - amount;
           balance = session.editBalance(sessionPin, bankID, newBalance);
           return balance;

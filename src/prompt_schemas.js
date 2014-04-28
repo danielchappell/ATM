@@ -9,7 +9,7 @@ promptSchemas = {
     properties: {
       "default screen": {
         description: "welcome to the ATM!\nchoose 1 for transaction or 2 to open a new account..".green,
-        pattern: /[12]/,
+        pattern: /^[12]$/,
         message: "please choose 1 for transaction or 2 for new account",
         required: true
       }
@@ -20,7 +20,7 @@ promptSchemas = {
     properties: {
       "account number": {
         description: "account number".green,
-        pattern: /[0-9]+/,
+        pattern: /^[0-9]+$/,
         message: "account number must contain only numbers..".red,
         required: true
       },
@@ -44,7 +44,7 @@ promptSchemas = {
       },
       "secure pin": {
         description: "secure pin: 4 digit number:".green,
-        pattern: /[0-9][0-9][0-9][0-9]/,
+        pattern: /^[0-9][0-9][0-9][0-9]$/,
         message: "must be a 4 digit number..".red,
         required: true,
         hidden: true
@@ -63,7 +63,7 @@ promptSchemas = {
     properties: {
       "another transaction?": {
         description: "another transaction?".green,
-        pattern: /y[es]*|n[o]?/i,
+        pattern: /y(es)?|n[o]?/i,
         message: "must answer yes or no..".red,
         required: true
       }
@@ -80,7 +80,7 @@ promptSchemas = {
               "enter 4 to withdraw funds\n".blue +
               "enter 5 to deposit funds\n".blue,
         description: "enter choice 1-5".green,
-        pattern: /[1-5]/,
+        pattern: /^[1-5]$/,
         required: true
       }
     }
@@ -104,7 +104,7 @@ promptSchemas = {
         menu: "how much would you like to withdraw?\n".blue +
               "  amount must be despensable in $20 bills..".blue,
         description: "withdraw:".green,
-        pattern: /^[0-9]*[02468]0$/,
+        pattern: /^[0-9]*[02468]0(\.00)?$/,
         message: "must be divisible by 20..".red,
         required: true
       }
@@ -117,7 +117,7 @@ promptSchemas = {
         menu: "how much would you like to deposit today?\n".blue +
               "  I accept $20 bills and personal checks of all amounts..".blue,
         description: "deposit funds: format 00.00:".green,
-        pattern: /[0-9]+\.[0-9][0-9]/,
+        pattern: /^[0-9]+\.[0-9][0-9]$/,
         message: "include to two decimal places".red,
         required: true
       }

@@ -316,13 +316,8 @@ ATM = (function() {
         this.on();
       }
     };
-
   }
   return ATM
 })();
 
 module.exports = ATM
-
-//START PROGRAM//
-newATM = new ATM();
-newATM.on();

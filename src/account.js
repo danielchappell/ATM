@@ -36,7 +36,6 @@ var Account = (function() {
           userBalance = newBalance;
         };
 
-
         //PUBLIC METHODS//
 
         this.validate = function(pin, bank) {

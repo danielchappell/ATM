@@ -1,7 +1,7 @@
 var chai = require('chai'),
 sinon = require('sinon'),
 prompt = require('prompt'),
-ATM = require('../atm.js'),
+ATM = require('../src/atm.js'),
 expect = chai.expect;
 
 

@@ -1,5 +1,5 @@
 var chai = require('chai'),
-Account = require('../account.js'),
+Account = require('../src/account.js'),
 expect = chai.expect;
 
 

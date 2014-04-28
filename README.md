@@ -27,7 +27,7 @@
   ```
 ##Launch Program
   ```bash
-  $ node atm.js
+  $ node app.js
   ```
   If all goes as planned ATM should run continually in the terminal window until interruped(CTRL-C) or closed.
 

@@ -35,7 +35,7 @@
   ATM is a work in progress, bug reports and pull requests are welcome!
 
 ###Tests
-  Our tests are written in [Mocha](http://http://visionmedia.github.io/mocha) with [Chai](http://chaijs.com) assertions and [Sinon](http://sinonjs.org) for stubbing and mocking
+  Our tests are written in [Mocha](http://mochajs.org/) with [Chai](http://chaijs.com) assertions and [Sinon](http://sinonjs.org) for stubbing and mocking
 
   To Run Tests..
   ```bash
